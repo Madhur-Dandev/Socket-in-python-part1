@@ -10,7 +10,7 @@ def create_socket():
         global port
         global host
         global s
-        port = 80
+        port = 9999
         host = ""
         s = socket.socket()
         print("socket created!")
@@ -58,17 +58,20 @@ def send_command(conn):
 
         if len(str.encode(cmd)) > 0:
             conn.send(str.encode(cmd))
-            sockets_list = [conn]
 
-            # while True:
-            #     if conn.recv(1024):
-            #         print("hey")
-            #     else:
-            #         print('hello')
-            #         break
-
+            resp_data = ""
             client_resp = str(conn.recv(1024), "utf-8")
-            print("Response from client : " + client_resp)
+
+            while len(client_resp) == 1024:
+                resp_data += client_resp
+                client_resp = str(conn.recv(1024), "utf-8")
+            else:
+                resp_data += client_resp                
+            
+            # print(len(client_resp))
+            # print("Response from client : " + resp_data)
+            print(len(resp_data))
+            print(resp_data)
 
 
 def main():
